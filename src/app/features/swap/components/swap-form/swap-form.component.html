@@ -1,0 +1,51 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="amount">BTC Amount</label>
+    <input id="amount" type="number" formControlName="amount" />
+
+    @if (form.controls.amount.touched && form.controls.amount.invalid) {
+      <div>
+        @if (form.controls.amount.errors?.['required']) {
+          <small>Amount is required.</small>
+        }
+
+        @if (form.controls.amount.errors?.['min']) {
+          <small>Minimum amount is 0.00001 BTC.</small>
+        }
+      </div>
+    }
+  </div>
+
+  <div>
+    <label for="recipient">USDC Address</label>
+    <input id="recipient" type="text" formControlName="recipient" />
+
+    @if (form.controls.recipient.touched && form.controls.recipient.invalid) {
+      <div>
+        @if (form.controls.recipient.errors?.['required']) {
+          <small>Recipient address is required.</small>
+        }
+
+        @if (form.controls.recipient.errors?.['minlength']) {
+          <small>Recipient address is too short.</small>
+        }
+      </div>
+    }
+  </div>
+
+  <button type="submit" [disabled]="isLoading()">
+    @if (isLoading()) {
+      Loading...
+    } @else {
+      Get Quote
+    }
+  </button>
+</form>
+
+@if (errorMessage()) {
+  <p>{{ errorMessage() }}</p>
+}
+
+@if (quote(); as quote) {
+  <app-swap-quote-card [quote]="quote"></app-swap-quote-card>
+}
