@@ -1,0 +1,26 @@
+<section class="wallet-connect">
+  <h3>BTC Wallet</h3>
+
+  @if (btcWalletService.account(); as account) {
+    <div class="wallet-connect__connected">
+      <p class="wallet-connect__label">Connected address</p>
+      <p class="wallet-connect__address">{{ account.address }}</p>
+
+      <button type="button" (click)="onDisconnect()">
+        Disconnect
+      </button>
+    </div>
+  } @else {
+    <button
+      type="button"
+      [disabled]="btcWalletService.isConnecting()"
+      (click)="onConnect()"
+    >
+      {{ btcWalletService.isConnecting() ? 'Connecting...' : 'Connect BTC wallet' }}
+    </button>
+  }
+
+  @if (errorMessage(); as errorMessage) {
+    <p class="wallet-connect__error">{{ errorMessage }}</p>
+  }
+</section>

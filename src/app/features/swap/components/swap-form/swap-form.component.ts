@@ -5,6 +5,7 @@ import {
   ThorchainService,
 } from '../../../../core/services/thorchain.service';
 import { SwapQuoteCardComponent } from '../swap-quote-card/swap-quote-card.component';
+import { BtcWalletService } from '../../../../core/services/btc-wallet.service';
 
 @Component({
   selector: 'app-swap-form',
@@ -16,6 +17,7 @@ export class SwapFormComponent {
   private readonly fb = inject(FormBuilder);
   private readonly thorchainService = inject(ThorchainService);
 
+  protected readonly btcWallet = inject(BtcWalletService);
   protected readonly isLoading = signal(false);
   protected readonly quote = signal<ThorchainQuoteResponse | null>(null);
   protected readonly errorMessage = signal<string | null>(null);
