@@ -1,215 +1,127 @@
-# WhiteRabbit
+# White Rabbit 🐇
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.4.
-
-## Development server
-
-To start a local development server, run:
-
-```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
-
-# 🐇 White Rabbit — Projekt dokumentace (v0.1)
-
-## Overview
-
-White Rabbit je Angular aplikace pro **BTC → USDC swap přes THORChain**.
-
-Aktuální stav:
-
-* aplikace získává **swap quote**
-* zobrazuje výstup, fees, memo a inbound address
-* zatím **neprovádí samotný swap**
+Angular application for **BTC → USDC swaps via THORChain**.
 
 ---
 
-## Tech Stack
+## 🚀 Current State (POC V1)
 
-* Angular (standalone)
+The application currently supports:
+
+### ✅ BTC Wallet Integration
+
+* Browser BTC wallet connection (Xverse / Sats Connect)
+* Retrieve and display BTC address
+* Reactive wallet state using Angular signals
+
+### ✅ Swap Quote Flow
+
+* User inputs:
+
+  * BTC amount
+  * USDC (EVM) destination address
+* Calls THORChain quote endpoint
+* Displays:
+
+  * expected output
+  * inbound address
+  * memo
+  * fees
+  * expiry
+
+### ✅ Architecture
+
+* Angular standalone components
 * Reactive Forms
-* HttpClient
-* Signals (state)
-* THORChain API
+* Signals for local state
+* Clean separation of concerns:
+
+  * `thorchain.service` → API communication
+  * `btc-wallet.service` → wallet integration
+  * `wallet-connect` → UI layer
+  * `swap-form` → user input
+  * `swap-quote-card` → quote display
 
 ---
 
-## Architektura
+## 📁 Project Structure
 
+```
 src/app/
+  core/services/
+    btc-wallet.service.ts
+    thorchain.service.ts
 
-core/
-services/
-thorchain.service.ts
-
-features/
-swap/
-pages/
-swap-page/
-
-```
-components/
-  swap-form/
-  swap-quote-card/
+  features/swap/
+    components/
+      wallet-connect/
+      swap-form/
+      swap-quote-card/
+    pages/
+      swap-page/
 ```
 
 ---
 
-## Flow aplikace
+## ⚙️ How to Run
 
-1. User zadá:
-
-   * BTC amount
-   * USDC address
-
-2. App:
-
-   * převede BTC → sats
-   * zavolá THORChain API
-
-3. Response:
-
-   * inbound_address
-   * memo
-   * expected_amount_out
-   * fees
-   * expiry
-
-4. UI:
-
-   * zobrazí quote
-
----
-
-## Důležité: Units
-
-### BTC
-
-1 BTC = 100,000,000 sats
-
-```ts
-amount * 100_000_000
+```bash
+npm install
+npm start
 ```
 
-### THORChain
+---
 
-Všechny hodnoty jsou v **1e8 (10⁸)**
+## 🔌 Requirements
 
-```ts
-value / 100_000_000
-```
-
-👉 platí i pro USDC
+* Browser with crypto wallet support (Chrome / Brave)
+* Installed BTC wallet (e.g. Xverse)
 
 ---
 
-## API
+## 🧠 Key Concepts
 
-Endpoint:
-https://thornode.ninerealms.com/thorchain/quote/swap
-
-Params:
-
-* from_asset = BTC.BTC
-* to_asset = ETH.USDC
-* amount = sats
-* destination = EVM address
+* 1 BTC = 100,000,000 sats
+* THORChain works with 1e8 precision
+* Quotes must be used before expiry
+* Swap execution is **not yet implemented**
 
 ---
 
-## Důležité poznámky
+## 🛠️ Next Steps
 
-### Quote ≠ Market price
+### 🔹 POC V2
 
-* TradingView = spot
-* THORChain = execution (po fees + slippage)
+* EVM wallet connection (MetaMask)
+* Autofill destination address
 
----
+### 🔹 POC V3
 
-### Aktuální limitace
+* Real BTC transaction execution
+* Use:
 
-* ❌ neposílá BTC
+  * `inbound_address`
+  * `memo`
+* Validate:
 
-* ❌ neprovádí swap
+  * quote expiry
+  * network halt
 
-* ❌ nesleduje tx
+### 🔹 Future
 
-* ✅ pouze zobrazuje quote
-
----
-
-## Další kroky
-
-### MVP dokončení
-
-* copy inbound address
-* copy memo
-* expiry countdown
-* instrukce pro usera
-
-### Funkční swap
-
-* sledování transakce
-* swap status
+* Swap status tracking
+* Multi-chain support
+* Better UX & error handling
 
 ---
 
-## Stav projektu
+## ⚠️ Disclaimer
 
-MVP (quote-only)
-
----
-
-## Mentální model
-
-BTC input → Quote → Instructions → (swap později)
+This project is currently in **POC stage**.
+Do **not** use with real funds until swap execution is fully validated.
 
 ---
+
+## 🧑‍💻 Author
+
+RideN
