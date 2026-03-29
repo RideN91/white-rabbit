@@ -1,116 +1,97 @@
 # Architecture
 
 ## 1. Cíl architektury
-Postavit wallet tak, aby:
-- šla rychle doručit první verze
-- šla rozšiřovat o další chainy
-- se nerozsypala při přidání mobile appky
-- byly oddělené citlivé části od UI
+Postavit jednoduchou web appku pro swap flow nad externí walletkou tak, aby:
+- šla rychle doručit první použitelná verze
+- šla rozšiřovat o další chainy a providery
+- zůstala přehledná a nepřestřelená
 
 ---
 
 ## 2. Návrh složek
 
-```txt
-wallet-app/
-├─ apps/
-│  ├─ web/
-│  └─ api/
-├─ packages/
-│  ├─ wallet-core/
-│  ├─ chain-adapters/
-│  ├─ thorchain-integration/
-│  ├─ maya-integration/
-│  ├─ shared-types/
-│  └─ ui-kit/
-├─ docs/
-│  ├─ wallet-mindmap.md
-│  ├─ roadmap.md
-│  └─ architecture.md
-├─ .env.example
-├─ package.json
-└─ README.md
-```
+src/app/
+├─ core/
+│  └─ services/
+│     ├─ btc-wallet.service.ts
+│     ├─ thorchain.service.ts
+│     ├─ swap-execution.service.ts
+│     └─ swap-status.service.ts
+├─ features/
+│  └─ swap/
+│     ├─ components/
+│     │  ├─ wallet-connect/
+│     │  ├─ swap-form/
+│     │  ├─ swap-quote-card/
+│     │  └─ swap-execution-preview/
+│     └─ pages/
+│        └─ swap-page/
+└─ shared/
 
 ---
 
 ## 3. Vrstvy systému
 
-### A. Web app
+### A. UI vrstva
 Zodpovědnost:
-- UI
 - formuláře
-- routing
-- správa session
-- zobrazení balances, historie, swap flow
+- zobrazení quote
+- preview swapu
+- potvrzení a stav swapu
 
-Doporučený stack:
+Technologie:
 - Angular
 - TypeScript
-- RxJS
+- Reactive Forms
 
----
-
-### B. API
+### B. Wallet vrstva
 Zodpovědnost:
-- pricing
-- cache
-- sjednocení dat z providerů
-- transakční historie
-- analytics
-- interní admin endpointy
-
-Doporučený stack:
-- NestJS
-- PostgreSQL
-- Redis
-
----
-
-### C. Wallet Core
-Zodpovědnost:
-- seed phrase
-- derivace klíčů
-- generování adres
-- signing
-- chain-neutral rozhraní
-
-Poznámka:
-Tato vrstva má být co nejvíc oddělená od Angularu.
-
----
-
-### D. Chain adapters
-Zodpovědnost:
-- implementace rozdílů mezi chainy
-- EVM adapter
-- BTC-like adapter
-- THORChain specifika
-- Maya specifika
+- connect / disconnect wallet
+- získání source adresy
+- později odeslání transakce
 
 Příklad:
-- `IChainAdapter`
-- `EvmChainAdapter`
-- `BitcoinChainAdapter`
+- btc-wallet.service.ts
+- později evm-wallet.service.ts
+
+### C. Provider vrstva
+Zodpovědnost:
+- volání quote API
+- execution data z providerů
+- polling swap statusu
+
+Příklad:
+- thorchain.service.ts
+- později maya.service.ts
+
+### D. Flow vrstva
+Zodpovědnost:
+- spojení formuláře, walletky a provider response
+- validace quote expiry
+- příprava execution payloadu
+- spuštění swap flow
+
+Příklad:
+- swap-execution.service.ts
 
 ---
 
 ## 4. Tok dat
 
-### Create wallet flow
-1. UI zavolá wallet core
-2. wallet core vygeneruje seed
-3. wallet core odvodí adresy
-4. výsledek se zašifruje heslem
-5. blob se uloží lokálně
+### Quote flow
+1. uživatel připojí BTC wallet
+2. zadá amount a recipient address
+3. appka zavolá THORChain quote
+4. zobrazí inbound address, memo, fees, expiry
+5. složí execution preview
 
-### Swap flow
-1. UI načte quote
-2. API nebo provider vrátí route
-3. UI ukáže fee a potvrzení
-4. wallet core podepíše transakci
-5. odešle se transakce
-6. historie se uloží
+### Execution flow
+1. uživatel potvrdí swap
+2. ověří se wallet connect
+3. ověří se quote expiry
+4. odešle se BTC transakce podle quote instrukcí
+5. uloží se txid
+6. začne tracking swapu
 
 ---
 
@@ -118,65 +99,37 @@ Příklad:
 
 ### Lokálně ve webu
 Ukládat:
-- theme
-- preferences
-- selected network
-- encrypted wallet blob
+- jednoduché UI preference
+- případně poslední použitou recipient address
 
 Neukládat:
-- plain private key
-- plain seed phrase
+- private key
+- seed phrase
 
-Možnosti:
-- localStorage
-- IndexedDB
-
-### Backend
-Ukládat:
-- cache cen
-- agregovanou historii
-- telemetry
-- revenue data
-
-Databáze:
-- PostgreSQL
-- Redis
+Poznámka:
+White Rabbit aktuálně používá externí wallet, takže citlivé klíče nespravuje.
 
 ---
 
 ## 6. Bezpečnostní principy
-- seed phrase zobrazit jen při vytvoření
-- nutit potvrzení zálohy
-- šifrovat wallet lokálně heslem
+- neukládat seed ani private key
+- validovat vstupy z formuláře
+- nepoužívat expirovaný quote
+- neodesílat swap bez validních execution dat
 - nepsat citlivá data do logů
-- validovat inputy
-- používat auditované knihovny
-- držet wallet core izolovaný od UI helperů
 
 ---
 
-## 7. Doporučené balíčky
-### Frontend
-- Angular
-- RxJS
-- zod nebo yup pro validace
-
-### Backend
-- NestJS
-- Prisma nebo TypeORM
-- Redis client
-
-### Blockchain
-- ethers
-- bitcoinjs-lib
-- chain-specific SDK podle potřeby
-
----
-
-## 8. První technické rozhodnutí
-Doporučená první verze:
+## 7. První technické rozhodnutí
+Aktuální směr:
 - Angular web app
-- NestJS API
-- wallet-core jako samostatný package
+- externí wallet integrace
 - THORChain jako první provider
-- Maya přidat až po dokončení prvního swap flow
+- Maya Protocol přidat až po dokončení prvního swap flow
+
+---
+
+## 8. Shrnutí
+White Rabbit je momentálně:
+
+webový swap klient nad externí walletkou

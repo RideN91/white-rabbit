@@ -1,74 +1,84 @@
-# Wallet Mind Map
+# White Rabbit Mind Map
 
 ## Cíl produktu
-- Non-custodial wallet
-- Web jako první verze
-- Později mobile app
-- Cross-chain swapy
+- Webová aplikace pro cross-chain swapy
+- Práce nad externí walletkou (non-custodial)
+- Zaměření na jednoduchý swap flow
 - Integrace:
-  - THORChain
-  - Maya Protocol
-  - další DEX / agregátory
+  - THORChain (v1)
+  - Maya Protocol (v2)
+
+---
 
 ## Hlavní části systému
 
-### 1. Frontend
+### 1. Frontend (Angular)
 - Angular
 - TypeScript
-- RxJS
-- UI knihovna:
-  - Angular Material
-  - nebo Tailwind + vlastní komponenty
+- Reactive Forms
+- Signals (lokální state)
+- UI:
+  - jednoduché komponenty
+  - swap flow
 
-### 2. Wallet Core
+---
+
+### 2. Wallet integrace
+- externí wallet (např. BTC wallet)
+- connect / disconnect
+- získání adresy
+- odeslání transakce (později)
+
+Poznámka:
+- aplikace nespravuje seed ani private key
+
+---
+
+### 3. Swap flow (core logika)
+- input:
+  - amount
+  - destination address
+- quote request
+- swap preview
+- potvrzení swapu
+- execution (odeslání tx)
+- tracking stavu swapu
+
+---
+
+### 4. Provider integrace
+- THORChain:
+  - quote
+  - inbound address
+  - memo
+  - execution flow
+- Maya Protocol (později):
+  - stejné flow jako THORChain
+
+---
+
+### 5. Data
+Lokálně:
+- UI state
+- poslední inputy
+
+Neukládat:
+- private key
 - seed phrase
-- generování adres
-- derivace účtů
-- signing transakcí
-- práce s více chainy
-- oddělená abstrakce nad chainy
 
-### 3. Blockchain integrace
-- EVM chains
-- Bitcoin-like chains
-- THORChain
-- Maya Protocol
-- quote
-- swap
-- fee tracking
-- historie transakcí
-
-### 4. Backend
-- API pro frontend
-- price service
-- portfolio cache
-- transakční historie
-- analytics
-- monitoring
-
-### 5. Uložení dat
-- web:
-  - localStorage jen na neškodná data
-  - IndexedDB pro větší data
-- citlivá data:
-  - šifrovaný wallet blob
-- backend:
-  - PostgreSQL
-  - Redis
+---
 
 ### 6. Bezpečnost
-- heslo pro odemčení wallet
-- šifrování lokálně
-- nikdy neukládat private key jako plain text
-- audit knihoven
 - validace adres
-- ochrana proti phishingu
+- kontrola expiry quote
+- nepoužívat expirovaný quote
+- žádné citlivé údaje v logách
 
-### 7. Monetizace
-- affiliate fee
+---
+
+### 7. Monetizace (později)
+- affiliate fee (THORChain / Maya)
 - swap fee
-- premium funkce
-- white-label řešení do budoucna
 
 ---
 
@@ -76,43 +86,36 @@
 
 ```mermaid
 mindmap
-  root((Wallet App))
+  root((White Rabbit))
     Produkt
-      Web
-      Mobile
-      Cross-chain swaps
-      Portfolio
-      Historie
-      Fee model
+      Web app
+      Swap flow
+      THORChain
+      Maya Protocol
     Frontend
       Angular
-      TypeScript
-      RxJS
-      UI
-    Wallet Core
-      Seed phrase
-      Address generation
-      Signing
-      Chain abstraction
+      Reactive Forms
+      Signals
+      UI Components
+    Wallet
+      External wallet
+      Connect
+      Address
+      Send transaction
+    Swap Flow
+      Input
+      Quote
+      Preview
+      Confirm
+      Execute
+      Tracking
     Integrace
       THORChain
       Maya Protocol
-      DEX agregatory
-      Fiat on-ramp
-    Backend
-      API
-      Pricing
-      History
-      Analytics
-      Monitoring
     Data
-      IndexedDB
-      Local storage
-      PostgreSQL
-      Redis
+      Local state
+      No private keys
     Security
-      Encryption
-      Password unlock
       Validation
-      Auditing
-```
+      Quote expiry
+      Safe execution

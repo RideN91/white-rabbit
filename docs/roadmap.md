@@ -1,170 +1,180 @@
 # Roadmap
 
-## Fáze 0 — návrh
+## Fáze 0 — Scope
 ### Cíl
-Vyjasnit scope a neskočit hned do kódu bez architektury.
-
-### Výstupy
-- definice MVP
-- seznam podporovaných chainů
-- seznam funkcí mimo MVP
-- základní návrh fee modelu
+Udržet projekt malý, čistý a reálně dokončitelný.
 
 ### Rozhodnutí
-- web první
+- pouze web app
 - Angular + TypeScript
-- NestJS backend
-- THORChain jako první integrace
+- externí wallet integrace
+- THORChain jako první provider
+- Maya Protocol jako druhý provider později
 
----
-
-## Fáze 1 — technický základ
-### Cíl
-Připravit projekt tak, aby se dal škálovat.
-
-### Úkoly
-- založit monorepo nebo standard repo
-- vytvořit `apps/web`
-- vytvořit `apps/api`
-- vytvořit `packages/wallet-core`
-- nastavit lint, format, testy
-- nastavit env proměnné
-- nastavit CI
-
-### Výstupy
-- běžící web app
-- běžící API
-- základní struktura projektu
-
----
-
-## Fáze 2 — wallet core MVP
-### Cíl
-Umět vytvořit a importovat wallet.
-
-### Úkoly
-- create wallet
-- import wallet ze seed phrase
-- password lock / unlock
-- generování adres
-- základní account model
-
-### Výstupy
-- uživatel vytvoří wallet
-- uživatel importuje wallet
-- wallet se lokálně uloží šifrovaně
-
----
-
-## Fáze 3 — balances a receive/send
-### Cíl
-Zobrazit první reálnou hodnotu pro uživatele.
-
-### Úkoly
-- fetch balances
-- zobrazení tokenů
-- receive screen
-- send form
-- validace adres
-- potvrzení transakcí
-
-### Výstupy
-- funkční receive
-- funkční send
-- přehled balance
-
----
-
-## Fáze 4 — THORChain integrace
-### Cíl
-Přidat první swap flow.
-
-### Úkoly
-- quote API
+### MVP
+- connect wallet
+- quote
 - swap preview
-- potvrzení swapu
-- fee zobrazení
-- affiliate fee parametr
-- swap historie
+- swap execution
+- swap status
+
+---
+
+## Fáze 1 — Web app základ
+### Cíl
+Mít čistý frontend základ pro swap flow.
+
+### Úkoly
+- založení Angular aplikace
+- standalone components
+- Reactive Forms
+- základní services pro wallet a swap API
+- základní UI struktura
 
 ### Výstupy
-- uživatel udělá swap přes THORChain
-- systém uloží a zobrazí historii swapu
+- běžící Angular app
+- základní architektura feature `swap`
+- připravený základ pro další flow
+
+### Stav
+- hotovo z větší části
 
 ---
 
-## Fáze 5 — Maya Protocol
+## Fáze 2 — Wallet connect
 ### Cíl
-Rozšířit likviditu a routing.
+Připojit první wallet a dostat source adresu do appky.
 
 ### Úkoly
-- quote integrace
-- swap flow
-- porovnání route
-- fallback logika
+- BTC wallet connect
+- wallet state
+- connect / disconnect UI
+- zobrazení source BTC address
 
 ### Výstupy
-- druhý swap provider
-- základ pro agregaci
+- uživatel připojí BTC wallet
+- aplikace zná source BTC address
+
+### Stav
+- hotovo
 
 ---
 
-## Fáze 6 — portfolio a tracking
+## Fáze 3 — THORChain quote + preview
 ### Cíl
-Přidat lepší UX a udržení uživatele.
+Umět připravit swap bez odeslání transakce.
 
 ### Úkoly
-- historie portfolia
-- graf hodnoty portfolia
-- přehled fee revenue
-- watchlist
-- notifikace
+- input pro BTC amount
+- input pro recipient address
+- fetch quote z THORChain
+- zobrazení quote
+- složení execution preview
+
+### Výstupy
+- inbound address
+- memo
+- expected output
+- expiry
+- unified execution preview
+
+### Stav
+- hotovo
 
 ---
 
-## Fáze 7 — security hardening
+## Fáze 4 — THORChain execution
 ### Cíl
-Zvýšit důvěru a připravit appku na reálné použití.
+Spustit první reálný swap.
 
 ### Úkoly
-- dependency audit
-- secure storage review
-- rate limiting
+- confirm krok
+- validace quote expiry
+- validace wallet connectu
+- odeslání BTC transakce podle quote instrukcí
+- zachycení txid
+
+### Výstupy
+- uživatel provede reálný BTC → USDC swap
+
+### Poznámka
+Bude potřeba ověřit přesný BTC flow vůči memo / inbound instrukcím.
+
+---
+
+## Fáze 5 — Swap status tracking
+### Cíl
+Ukázat uživateli, co se se swapem děje.
+
+### Úkoly
+- pending state
+- polling statusu
+- zobrazení txid
+- completed / refunded state
+
+### Výstupy
+- uživatel vidí průběh swapu od submitu po completion
+
+---
+
+## Fáze 6 — Maya Protocol
+### Cíl
+Přidat druhý swap provider.
+
+### Úkoly
+- Maya quote
+- Maya preview
+- Maya execution flow
+- přepínání provideru
+- případně route comparison
+
+### Výstupy
+- THORChain + Maya pod jedním UI
+
+---
+
+## Fáze 7 — Cleanup a hardening
+### Cíl
+Udělat appku stabilnější a bezpečnější.
+
+### Úkoly
+- error handling
+- edge cases
+- lepší validace adres
+- UX polish
 - logování
-- error monitoring
-- recovery flow
+- safe guards kolem execution
 
----
-
-## Fáze 8 — mobile app
-### Cíl
-Rozšířit produkt po ověření webového MVP.
-
-### Možnosti
-- React Native
-- Flutter
-- později nativní řešení
-
-### Doporučení
-Mobile řešit až ve chvíli, kdy:
-- bude fungovat wallet core
-- bude validovaný swap use-case
-- budou první uživatelé
+### Výstupy
+- stabilnější a použitelnější web app
 
 ---
 
 ## MVP definice
-Do MVP patří:
-- create/import wallet
-- unlock wallet
-- balances
-- receive/send
-- THORChain swap
-- základní historie
 
-Mimo MVP:
+### Do MVP patří
+- BTC wallet connect
+- THORChain quote
+- swap preview
+- real BTC swap execution
+- swap status tracking
+
+### Mimo MVP
+- create / import vlastní wallet
+- balances dashboard
+- portfolio
+- mobile app
 - staking
 - fiat on-ramp
-- NFT
-- push notifikace
-- hardware wallet support
+- hardware wallets
+- backend
+- obecný wallet produkt
+
+---
+
+## Shrnutí
+White Rabbit je momentálně zamýšlený jako:
+
+**webový swap klient nad externí walletkou**
+
+ne jako vlastní wallet aplikace.
