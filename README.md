@@ -1,6 +1,8 @@
 # White Rabbit 🐇
 
-Angular application for **BTC → USDC swaps via THORChain**.
+Angular web application for **BTC → USDC swaps via THORChain**.
+
+White Rabbit is a **swap client built on top of external wallets**, not a wallet itself.
 
 ---
 
@@ -13,6 +15,8 @@ The application currently supports:
 * Browser BTC wallet connection (Xverse / Sats Connect)
 * Retrieve and display BTC address
 * Reactive wallet state using Angular signals
+
+---
 
 ### ✅ Swap Quote Flow
 
@@ -29,18 +33,44 @@ The application currently supports:
   * fees
   * expiry
 
+---
+
+### ✅ Swap Execution Preview
+
+* Combines:
+
+  * form input
+  * wallet address
+  * THORChain quote response
+* Builds a unified **execution preview object**
+* Displays:
+
+  * source wallet address
+  * BTC amount (BTC + sats)
+  * destination address
+  * inbound address
+  * memo
+  * expected output
+  * expiry
+
+This preview represents the **exact data required for swap execution**, but no transaction is sent yet.
+
+---
+
 ### ✅ Architecture
 
 * Angular standalone components
 * Reactive Forms
 * Signals for local state
-* Clean separation of concerns:
+* Feature-based structure
 
-  * `thorchain.service` → API communication
-  * `btc-wallet.service` → wallet integration
-  * `wallet-connect` → UI layer
-  * `swap-form` → user input
-  * `swap-quote-card` → quote display
+Separation of concerns:
+
+* `thorchain.service` → API communication
+* `btc-wallet.service` → wallet integration
+* `swap-form` → user input + flow orchestration
+* `swap-quote-card` → quote display
+* `wallet-connect` → wallet UI
 
 ---
 
@@ -85,39 +115,48 @@ npm start
 * THORChain works with 1e8 precision
 * Quotes must be used before expiry
 * Swap execution is **not yet implemented**
+* App does **not store private keys or seed phrases**
 
 ---
 
 ## 🛠️ Next Steps
 
-### 🔹 POC V2
+### 🔹 POC V2 — Execution
 
-* EVM wallet connection (MetaMask)
-* Autofill destination address
-
-### 🔹 POC V3
-
-* Real BTC transaction execution
-* Use:
-
-  * `inbound_address`
-  * `memo`
+* Add swap confirmation step
 * Validate:
 
+  * wallet connection
   * quote expiry
-  * network halt
+* Send BTC transaction to `inbound_address`
+* Use `memo` from quote
+* Capture `txid`
+
+---
+
+### 🔹 POC V3 — Swap Status
+
+* Track swap progress
+* Show:
+
+  * pending
+  * processing
+  * completed / refunded
+
+---
 
 ### 🔹 Future
 
-* Swap status tracking
-* Multi-chain support
+* Maya Protocol integration
+* Multi-provider support
 * Better UX & error handling
 
 ---
 
 ## ⚠️ Disclaimer
 
-This project is currently in **POC stage**.
+This project is in **POC stage**.
+
 Do **not** use with real funds until swap execution is fully validated.
 
 ---
