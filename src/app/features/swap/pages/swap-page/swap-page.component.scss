@@ -1,0 +1,25 @@
+.page {
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  background: #000;
+  color: #fff;
+
+  &__header {
+    max-width: 720px;
+    margin: 0 auto 2rem;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 600;
+  }
+
+  &__content {
+    max-width: 720px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}

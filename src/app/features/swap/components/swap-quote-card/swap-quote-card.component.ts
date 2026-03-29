@@ -5,6 +5,7 @@ import { ThorchainQuoteResponse } from '../../../../core/services/thorchain.serv
   selector: 'app-swap-quote-card',
   standalone: true,
   templateUrl: './swap-quote-card.component.html',
+  styleUrl: './swap-quote-card.component.scss',
 })
 export class SwapQuoteCardComponent {
   @Input({ required: true }) quote!: ThorchainQuoteResponse;

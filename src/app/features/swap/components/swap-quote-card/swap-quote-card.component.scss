@@ -1,0 +1,28 @@
+.quote-card {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border: 1px solid #dcdcdc;
+  border-radius: 0.75rem;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  &__label {
+    display: block;
+    font-size: 0.75rem;
+    opacity: 0.6;
+    margin-bottom: 0.15rem;
+  }
+
+  &__value {
+    font-size: 0.95rem;
+  }
+
+  &__mono {
+    font-family: monospace;
+    word-break: break-all;
+  }
+}

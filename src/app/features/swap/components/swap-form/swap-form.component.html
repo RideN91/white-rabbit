@@ -1,68 +1,92 @@
-ZDE!!
-<form
-  [formGroup]="form"
-  (ngSubmit)="onSubmit()"
->
+<section class="swap-form-card">
+  <h3>Swap</h3>
 
-  @if (btcWallet.account(); as account) {
-  <p>From: {{ account.address }}</p>
-  }
-  <div>
-    <label for="amount">BTC Amount</label>
-    <input
-      id="amount"
-      type="number"
-      formControlName="amount"
-    />
-
-    @if (form.controls.amount.touched && form.controls.amount.invalid) {
-    <div>
-      @if (form.controls.amount.errors?.['required']) {
-      <small>Amount is required.</small>
-      }
-
-      @if (form.controls.amount.errors?.['min']) {
-      <small>Minimum amount is 0.00001 BTC.</small>
-      }
-    </div>
-    }
-  </div>
-
-  <div>
-    <label for="recipient">USDC Address</label>
-    <input
-      id="recipient"
-      type="text"
-      formControlName="recipient"
-    />
-
-    @if (form.controls.recipient.touched && form.controls.recipient.invalid) {
-    <div>
-      @if (form.controls.recipient.errors?.['required']) {
-      <small>Recipient address is required.</small>
-      }
-
-      @if (form.controls.recipient.errors?.['minlength']) {
-      <small>Recipient address is too short.</small>
-      }
-    </div>
-    }
-  </div>
-
-  <button
-    type="submit"
-    [disabled]="isLoading()"
+  <form
+    class="swap-form-card__form"
+    [formGroup]="form"
+    (ngSubmit)="onSubmit()"
   >
-    @if (isLoading()) {
-    Loading...
-    } @else {
-    Get Quote
+    @if (btcWallet.account(); as account) {
+      <div class="swap-form-card__info">
+        <span class="swap-form-card__label">From wallet</span>
+        <span class="swap-form-card__value swap-form-card__mono">
+          {{ account.address }}
+        </span>
+      </div>
     }
-  </button>
-</form>
+
+    <div class="swap-form-card__field">
+      <label
+        class="swap-form-card__label"
+        for="amount"
+      >
+        BTC Amount
+      </label>
+
+      <input
+        id="amount"
+        class="swap-form-card__input"
+        type="number"
+        formControlName="amount"
+      />
+
+      @if (form.controls.amount.touched && form.controls.amount.invalid) {
+        <div class="swap-form-card__error-group">
+          @if (form.controls.amount.errors?.['required']) {
+            <small class="swap-form-card__error">Amount is required.</small>
+          }
+
+          @if (form.controls.amount.errors?.['min']) {
+            <small class="swap-form-card__error">Minimum amount is 0.00001 BTC.</small>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="swap-form-card__field">
+      <label
+        class="swap-form-card__label"
+        for="recipient"
+      >
+        USDC Address
+      </label>
+
+      <input
+        id="recipient"
+        class="swap-form-card__input"
+        type="text"
+        formControlName="recipient"
+      />
+
+      @if (form.controls.recipient.touched && form.controls.recipient.invalid) {
+        <div class="swap-form-card__error-group">
+          @if (form.controls.recipient.errors?.['required']) {
+            <small class="swap-form-card__error">Recipient address is required.</small>
+          }
+
+          @if (form.controls.recipient.errors?.['minlength']) {
+            <small class="swap-form-card__error">Recipient address is too short.</small>
+          }
+        </div>
+      }
+    </div>
+
+    <button
+      class="swap-form-card__button"
+      type="submit"
+      [disabled]="isLoading()"
+    >
+      @if (isLoading()) {
+        Loading...
+      } @else {
+        Get Quote
+      }
+    </button>
+  </form>
+</section>
 
 @if (errorMessage()) {
-<p>{{ errorMessage() }}</p>
+  <p class="swap-form-card__error-message">{{ errorMessage() }}</p>
 }
 
 @if (quote(); as quote) {
@@ -70,18 +94,67 @@ ZDE!!
 }
 
 @if (executionPreview(); as preview) {
-  <section class="swap-preview">
+  <section class="swap-preview-card">
     <h3>Swap Preview</h3>
 
-    <p><strong>From wallet:</strong> {{ preview.fromAddress ?? 'Not connected' }}</p>
-    <p><strong>From asset:</strong> {{ preview.fromAsset }}</p>
-    <p><strong>To asset:</strong> {{ preview.toAsset }}</p>
-    <p><strong>Amount BTC:</strong> {{ preview.amountBtc }}</p>
-    <p><strong>Amount sats:</strong> {{ preview.amountSats }}</p>
-    <p><strong>Destination address:</strong> {{ preview.destinationAddress }}</p>
-    <p><strong>Inbound address:</strong> {{ preview.inboundAddress }}</p>
-    <p><strong>Memo:</strong> {{ preview.memo }}</p>
-    <p><strong>Expected amount out:</strong> {{ preview.expectedAmountOut }}</p>
-    <p><strong>Expiry:</strong> {{ preview.expiry }}</p>
+    <div class="swap-preview-card__content">
+      <p>
+        <span class="swap-preview-card__label">From wallet</span>
+        <span class="swap-preview-card__value swap-preview-card__mono">
+          {{ preview.fromAddress ?? 'Not connected' }}
+        </span>
+      </p>
+
+      <p>
+        <span class="swap-preview-card__label">From asset</span>
+        <span class="swap-preview-card__value">{{ preview.fromAsset }}</span>
+      </p>
+
+      <p>
+        <span class="swap-preview-card__label">To asset</span>
+        <span class="swap-preview-card__value">{{ preview.toAsset }}</span>
+      </p>
+
+      <p>
+        <span class="swap-preview-card__label">Amount BTC</span>
+        <span class="swap-preview-card__value">{{ preview.amountBtc }}</span>
+      </p>
+
+      <p>
+        <span class="swap-preview-card__label">Amount sats</span>
+        <span class="swap-preview-card__value">{{ preview.amountSats }}</span>
+      </p>
+
+      <p>
+        <span class="swap-preview-card__label">Destination address</span>
+        <span class="swap-preview-card__value swap-preview-card__mono">
+          {{ preview.destinationAddress }}
+        </span>
+      </p>
+
+      <p>
+        <span class="swap-preview-card__label">Inbound address</span>
+        <span class="swap-preview-card__value swap-preview-card__mono">
+          {{ preview.inboundAddress }}
+        </span>
+      </p>
+
+      <p>
+        <span class="swap-preview-card__label">Memo</span>
+        <span class="swap-preview-card__value swap-preview-card__mono">
+          {{ preview.memo }}
+        </span>
+      </p>
+
+      <p>
+        <span class="swap-preview-card__label">Expected amount out</span>
+        <span class="swap-preview-card__value">{{ preview.expectedAmountOut }}</span>
+      </p>
+
+      <p>
+        <span class="swap-preview-card__label">Expiry</span>
+        <span class="swap-preview-card__value">{{ preview.expiry }}</span>
+      </p>
+    </div>
   </section>
 }

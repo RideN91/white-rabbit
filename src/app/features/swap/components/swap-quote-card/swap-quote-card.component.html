@@ -1,9 +1,34 @@
-<div>
-  <h3>Quote</h3>
+<section class="quote-card">
+  <h3 class="d-flex p-2">Quote</h3>
 
-  <p><strong>Expected USDC:</strong> {{ expectedAmountOutFormatted }}</p>
-  <p><strong>Total fee:</strong> {{ totalFeeFormatted }}</p>
-  <p><strong>Inbound address:</strong> {{ quote.inbound_address }}</p>
-  <p><strong>Memo:</strong> {{ quote.memo }}</p>
-  <p><strong>Expiry:</strong> {{ expiryFormatted }}</p>
-</div>
+  <div class="quote-card__content">
+    <p>
+      <span class="quote-card__label">Expected USDC</span>
+      <span class="quote-card__value">{{ expectedAmountOutFormatted }}</span>
+    </p>
+
+    <p>
+      <span class="quote-card__label">Total fee</span>
+      <span class="quote-card__value">{{ totalFeeFormatted }}</span>
+    </p>
+
+    <p>
+      <span class="quote-card__label">Inbound address</span>
+      <span class="quote-card__value quote-card__mono">
+        {{ quote.inbound_address }}
+      </span>
+    </p>
+
+    <p>
+      <span class="quote-card__label">Memo</span>
+      <span class="quote-card__value quote-card__mono">
+        {{ quote.memo }}
+      </span>
+    </p>
+
+    <p>
+      <span class="quote-card__label">Expiry</span>
+      <span class="quote-card__value">{{ expiryFormatted }}</span>
+    </p>
+  </div>
+</section>

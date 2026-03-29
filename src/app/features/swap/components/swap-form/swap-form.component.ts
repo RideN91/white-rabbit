@@ -25,6 +25,7 @@ interface SwapExecutionPreview {
   standalone: true,
   imports: [ReactiveFormsModule, SwapQuoteCardComponent],
   templateUrl: './swap-form.component.html',
+  styleUrl: './swap-form.component.scss',
 })
 export class SwapFormComponent {
   private readonly fb = inject(FormBuilder);

@@ -1,17 +1,26 @@
-<section class="wallet-connect">
+<section class="wallet-card">
   <h3>BTC Wallet</h3>
 
   @if (btcWalletService.account(); as account) {
-    <div class="wallet-connect__connected">
-      <p class="wallet-connect__label">Connected address</p>
-      <p class="wallet-connect__address">{{ account.address }}</p>
+    <div class="wallet-card__content">
+      <div class="wallet-card__info">
+        <span class="wallet-card__label">Connected address</span>
+        <span class="wallet-card__value wallet-card__mono">
+          {{ account.address }}
+        </span>
+      </div>
 
-      <button type="button" (click)="onDisconnect()">
+      <button
+        class="wallet-card__button wallet-card__button--secondary"
+        type="button"
+        (click)="onDisconnect()"
+      >
         Disconnect
       </button>
     </div>
   } @else {
     <button
+      class="wallet-card__button"
       type="button"
       [disabled]="btcWalletService.isConnecting()"
       (click)="onConnect()"
@@ -21,6 +30,6 @@
   }
 
   @if (errorMessage(); as errorMessage) {
-    <p class="wallet-connect__error">{{ errorMessage }}</p>
+    <p class="wallet-card__error">{{ errorMessage }}</p>
   }
 </section>

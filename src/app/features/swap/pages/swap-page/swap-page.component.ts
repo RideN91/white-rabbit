@@ -6,5 +6,6 @@ import { WalletConnectComponent } from '../../components/wallet-connect/wallet-c
   standalone: true,
   imports: [SwapFormComponent, WalletConnectComponent],
   templateUrl: './swap-page.component.html',
+  styleUrl: './swap-page.component.scss',
 })
 export class SwapPageComponent {}
