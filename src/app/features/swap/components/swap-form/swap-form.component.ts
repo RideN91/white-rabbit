@@ -7,6 +7,19 @@ import {
 import { SwapQuoteCardComponent } from '../swap-quote-card/swap-quote-card.component';
 import { BtcWalletService } from '../../../../core/services/btc-wallet.service';
 
+interface SwapExecutionPreview {
+  amountBtc: string;
+  amountSats: string;
+  destinationAddress: string;
+  expectedAmountOut: string;
+  expiry: number;
+  fromAddress: string | null;
+  fromAsset: 'BTC.BTC';
+  inboundAddress: string;
+  memo: string;
+  toAsset: 'ETH.USDC';
+}
+
 @Component({
   selector: 'app-swap-form',
   standalone: true,
@@ -16,8 +29,8 @@ import { BtcWalletService } from '../../../../core/services/btc-wallet.service';
 export class SwapFormComponent {
   private readonly fb = inject(FormBuilder);
   private readonly thorchainService = inject(ThorchainService);
-
   protected readonly btcWallet = inject(BtcWalletService);
+  protected readonly executionPreview = signal<SwapExecutionPreview | null>(null);
   protected readonly isLoading = signal(false);
   protected readonly quote = signal<ThorchainQuoteResponse | null>(null);
   protected readonly errorMessage = signal<string | null>(null);
@@ -43,11 +56,26 @@ export class SwapFormComponent {
 
     this.isLoading.set(true);
     this.quote.set(null);
+    this.executionPreview.set(null);
     this.errorMessage.set(null);
 
     this.thorchainService.getSwapQuote(amountInSats, recipient).subscribe({
       next: (response) => {
         this.quote.set(response);
+        this.executionPreview.set({
+          amountBtc: amount,
+          amountSats: amountInSats,
+          destinationAddress: recipient,
+          expectedAmountOut: response.expected_amount_out,
+          expiry: response.expiry,
+          fromAddress: this.btcWallet.account()?.address ?? null,
+          fromAsset: 'BTC.BTC',
+          inboundAddress: response.inbound_address,
+          memo: response.memo,
+          toAsset: 'ETH.USDC',
+        });
+        console.log('execution preview', this.executionPreview());
+
         this.isLoading.set(false);
       },
       error: () => {

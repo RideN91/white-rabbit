@@ -66,5 +66,22 @@ ZDE!!
 }
 
 @if (quote(); as quote) {
-<app-swap-quote-card [quote]="quote"></app-swap-quote-card>
+  <app-swap-quote-card [quote]="quote"></app-swap-quote-card>
+}
+
+@if (executionPreview(); as preview) {
+  <section class="swap-preview">
+    <h3>Swap Preview</h3>
+
+    <p><strong>From wallet:</strong> {{ preview.fromAddress ?? 'Not connected' }}</p>
+    <p><strong>From asset:</strong> {{ preview.fromAsset }}</p>
+    <p><strong>To asset:</strong> {{ preview.toAsset }}</p>
+    <p><strong>Amount BTC:</strong> {{ preview.amountBtc }}</p>
+    <p><strong>Amount sats:</strong> {{ preview.amountSats }}</p>
+    <p><strong>Destination address:</strong> {{ preview.destinationAddress }}</p>
+    <p><strong>Inbound address:</strong> {{ preview.inboundAddress }}</p>
+    <p><strong>Memo:</strong> {{ preview.memo }}</p>
+    <p><strong>Expected amount out:</strong> {{ preview.expectedAmountOut }}</p>
+    <p><strong>Expiry:</strong> {{ preview.expiry }}</p>
+  </section>
 }
