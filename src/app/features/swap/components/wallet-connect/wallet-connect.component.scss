@@ -1,10 +1,9 @@
 .wallet-card {
-  margin-bottom: 1.5rem;
-  padding: 1rem;
+  border: 2px solid rgba(196, 242, 227, 0.964);
   border-radius: 0.75rem;
-
   background: #1e1e1e;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 1rem;
+  animation: pulse-border 2s infinite alternate;
 
   &__content {
     display: flex;
@@ -58,4 +57,10 @@
     margin-top: 0.75rem;
     color: #ff6b6b;
   }
+}
+
+@keyframes pulse-border {
+  0%   { box-shadow: 0 0 4px rgba(0, 255, 128, 0.2); }
+  50%  { box-shadow: 0 0 9.5px rgba(228, 230, 230, 0.953) }
+  100% { box-shadow: 0 0 4px rgba(0, 255, 128, 0.2); }
 }

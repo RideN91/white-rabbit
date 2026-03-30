@@ -1,12 +1,22 @@
+/* Základní karty */
 .swap-form-card,
 .swap-preview-card {
   margin-top: 1.5rem;
   padding: 1rem;
   border-radius: 0.75rem;
   background: #1e1e1e;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(225, 237, 233, 0.964);
+  animation: pulse-border 2s infinite alternate; 
 }
 
+
+@keyframes pulse-border {
+  0%   { box-shadow: 0 0 4px rgba(0, 255, 128, 0.2); }
+  50%  { box-shadow: 0 0 9.5px rgba(228, 230, 230, 0.953); }
+  100% { box-shadow: 0 0 4px rgba(0, 255, 128, 0.2); }
+}
+
+/* Swap Form Card */
 .swap-form-card {
   &__form {
     display: flex;
@@ -38,7 +48,7 @@
   &__input {
     padding: 0.75rem 0.85rem;
     border-radius: 0.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 2px solid rgba(255, 255, 255, 0.12);
     background: #111;
     color: #fff;
   }
@@ -57,6 +67,7 @@
     color: #000;
     cursor: pointer;
     font-weight: 600;
+    transition: all 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
   }
 
   &__button:disabled {
@@ -80,6 +91,7 @@
   }
 }
 
+/* Swap Preview Card */
 .swap-preview-card {
   &__content {
     display: flex;

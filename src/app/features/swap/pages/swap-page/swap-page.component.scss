@@ -1,7 +1,7 @@
 .page {
   min-height: 100vh;
   padding: 2rem 1rem;
-  background: #000;
+  background: #000500;
   color: #fff;
 
   &__header {
@@ -11,8 +11,31 @@
 
   &__title {
     margin: 0;
-    font-size: 1.75rem;
+    margin-left: 240px;
+    font-size: 2rem;
     font-weight: 600;
+    letter-spacing: 0.5px;
+
+  color: #e6e6e6;
+
+  /* gradient textu */
+  background: linear-gradient(90deg, #cfcfcf, #ffffff, #bfbfbf);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  /* Firefox podpora */
+  background-clip: text; /* standardní */
+  color: transparent;    
+
+   text-shadow:
+    0 0 2px rgba(255, 255, 255, 0.495),
+    0 0 6px rgba(200, 200, 200, 0.384),
+    0 2px 4px rgba(0, 0, 0, 0.8);
+
+  /* animace světla (volitelné) */
+  background-size: 200% auto;
+  animation: shine 4s linear infinite;
+
   }
 
   &__content {
@@ -22,4 +45,46 @@
     flex-direction: column;
     gap: 1.5rem;
   }
+}
+.page__title {
+  margin: 0;
+  margin-left: 240px;
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  line-height: 4rem;
+
+  /* stříbrný gradient textu */
+  background: linear-gradient(90deg, #cfcfcf, #ffffff, #bfbfbf);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text; /* Firefox fallback */
+  color: transparent;
+
+  /* jemný glow pro text */
+  text-shadow:
+    0 0 2px rgba(255, 255, 255, 0.3),
+    0 0 4px rgba(200, 200, 200, 0.2);
+}
+
+.page__title .emoji {
+  display: inline-block;
+  font-size: 2.2rem; /* větší pro lepší detaily */
+  vertical-align: middle;
+  position: relative;
+  top: -10px;
+
+  /* jemný glow a ostrý tvar */
+  filter: drop-shadow(0 0 1px #ffffff)
+          drop-shadow(0 0 2px #cfcfcf)
+          drop-shadow(0 0 4px #7fff7f51);
+
+  /* animace hopu */
+  animation: bounce 1s ease-in-out infinite alternate;
+}
+
+@keyframes bounce {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-6px) rotate(-2deg); } /* lehký pohyb + náklon */
+  100% { transform: translateY(0) rotate(0deg); }
 }
