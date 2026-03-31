@@ -58,9 +58,3 @@
     color: #ff6b6b;
   }
 }
-
-@keyframes pulse-border {
-  0%   { box-shadow: 0 0 4px rgba(0, 255, 128, 0.2); }
-  50%  { box-shadow: 0 0 9.5px rgba(228, 230, 230, 0.953) }
-  100% { box-shadow: 0 0 4px rgba(0, 255, 128, 0.2); }
-}

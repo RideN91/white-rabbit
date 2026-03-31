@@ -7,7 +7,7 @@ import {
 import { SwapQuoteCardComponent } from '../swap-quote-card/swap-quote-card.component';
 import { BtcWalletService } from '../../../../core/services/btc-wallet.service';
 
-interface SwapExecutionPreview {
+export interface SwapExecutionPreview {
   amountBtc: string;
   amountSats: string;
   destinationAddress: string;
@@ -41,7 +41,19 @@ export class SwapFormComponent {
     recipient: ['', [Validators.required, Validators.minLength(5)]],
   });
 
-  protected onSubmit(): void {
+  public canExecute(): boolean {
+    return !!this.executionPreview()
+      && this.btcWallet.isConnected()
+      && !this.isQuoteExpired();
+  }
+
+  public onExecuteSwap(): void {
+    if (!this.canExecute()) return;
+
+    console.log('EXECUTE_SWAP', this.executionPreview());
+  }
+
+  public onSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
@@ -88,5 +100,10 @@ export class SwapFormComponent {
 
   private convertBtcToSats(amount: string): string {
     return Math.round(Number(amount) * 100_000_000).toString();
+  }
+
+  private isQuoteExpired(): boolean {
+    const expiry = this.executionPreview()?.expiry;
+    return !expiry || Date.now() > expiry * 1000;
   }
 }
