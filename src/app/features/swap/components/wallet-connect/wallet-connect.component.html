@@ -1,7 +1,8 @@
 <section class="wallet-card">
   <h3>BTC Wallet</h3>
 
-  @if (btcWalletService.account(); as account) {
+  <div class="d-flex justify-content-end">
+    @if (btcWalletService.account(); as account) {
     <div class="wallet-card__content">
       <div class="wallet-card__info">
         <span class="wallet-card__label">Connected address</span>
@@ -18,7 +19,7 @@
         Disconnect
       </button>
     </div>
-  } @else {
+    } @else {
     <button
       class="wallet-card__button"
       type="button"
@@ -27,9 +28,10 @@
     >
       {{ btcWalletService.isConnecting() ? 'Connecting...' : 'Connect BTC wallet' }}
     </button>
-  }
+    }
 
-  @if (errorMessage(); as errorMessage) {
+    @if (errorMessage(); as errorMessage) {
     <p class="wallet-card__error">{{ errorMessage }}</p>
-  }
+    }
+  </div>
 </section>
