@@ -1,166 +1,93 @@
 # White Rabbit 🐇
 
-Angular web application for **BTC → USDC swaps via THORChain**.
+Angular web app for **BTC → USDC swaps via THORChain**.\
+Client-side only --- uses external wallets (Xverse via sats-connect).
 
-White Rabbit is a **swap client built on top of external wallets**, not a wallet itself.
+------------------------------------------------------------------------
 
----
+## 🚀 Current State (POC V1 → V2 in progress)
 
-## 🚀 Current State (POC V1)
+### ✅ Wallet
 
-The application currently supports:
+-   BTC wallet connect (Xverse / sats-connect)
+-   address + reactive state (signals)
 
-### ✅ BTC Wallet Integration
+### ✅ Quote
 
-* Browser BTC wallet connection (Xverse / Sats Connect)
-* Retrieve and display BTC address
-* Reactive wallet state using Angular signals
+-   input: BTC amount + destination address
+-   THORChain quote fetch
+-   data:
+    -   inbound address
+    -   memo
+    -   expected out
+    -   expiry
 
----
+### ✅ Execution Preview
 
-### ✅ Swap Quote Flow
+Unified model (`SwapExecutionPreview`): - amount (BTC + sats) -
+fromAddress - destinationAddress - inboundAddress - memo -
+expectedAmountOut - expiry
 
-* User inputs:
+### 🚧 Execution (in progress)
 
-  * BTC amount
-  * USDC (EVM) destination address
-* Calls THORChain quote endpoint
-* Displays:
+-   confirm step (Execute Swap button)
+-   validation:
+    -   wallet connected
+    -   preview exists
+    -   quote not expired
+-   execution service (`swap-execution.service`)
+-   wallet integration (`btc-wallet.service.signAndBroadcastPsbt`)
+-   PSBT builder scaffold (not implemented yet)
 
-  * expected output
-  * inbound address
-  * memo
-  * fees
-  * expiry
+------------------------------------------------------------------------
 
----
+## 🧱 Architecture
 
-### ✅ Swap Execution Preview
+-   Angular standalone components
+-   Reactive Forms
+-   Signals (local state)
 
-* Combines:
+### Services
 
-  * form input
-  * wallet address
-  * THORChain quote response
-* Builds a unified **execution preview object**
-* Displays:
+-   `thorchain.service` → API (quote)
+-   `btc-wallet.service` → wallet (connect, sign)
+-   `swap-execution.service` → execution flow
 
-  * source wallet address
-  * BTC amount (BTC + sats)
-  * destination address
-  * inbound address
-  * memo
-  * expected output
-  * expiry
+------------------------------------------------------------------------
 
-This preview represents the **exact data required for swap execution**, but no transaction is sent yet.
+## 📁 Structure
 
----
+src/app/ core/services/ btc-wallet.service.ts thorchain.service.ts
+swap-execution.service.ts
 
-### ✅ Architecture
+features/swap/ components/ wallet-connect/ swap-form/ swap-quote-card/
 
-* Angular standalone components
-* Reactive Forms
-* Signals for local state
-* Feature-based structure
+------------------------------------------------------------------------
 
-Separation of concerns:
+## ⚙️ Run
 
-* `thorchain.service` → API communication
-* `btc-wallet.service` → wallet integration
-* `swap-form` → user input + flow orchestration
-* `swap-quote-card` → quote display
-* `wallet-connect` → wallet UI
+npm install npm start
 
----
+------------------------------------------------------------------------
 
-## 📁 Project Structure
+## 🧠 Notes
 
-```
-src/app/
-  core/services/
-    btc-wallet.service.ts
-    thorchain.service.ts
+-   1 BTC = 100,000,000 sats
+-   THORChain uses 1e8 precision
+-   memo is required for swap
+-   app does not hold private keys
 
-  features/swap/
-    components/
-      wallet-connect/
-      swap-form/
-      swap-quote-card/
-    pages/
-      swap-page/
-```
+------------------------------------------------------------------------
 
----
+## 🔜 Next
 
-## ⚙️ How to Run
+-   build PSBT (UTXO + outputs + memo)
+-   sign via wallet
+-   broadcast BTC tx
+-   return txId
 
-```bash
-npm install
-npm start
-```
-
----
-
-## 🔌 Requirements
-
-* Browser with crypto wallet support (Chrome / Brave)
-* Installed BTC wallet (e.g. Xverse)
-
----
-
-## 🧠 Key Concepts
-
-* 1 BTC = 100,000,000 sats
-* THORChain works with 1e8 precision
-* Quotes must be used before expiry
-* Swap execution is **not yet implemented**
-* App does **not store private keys or seed phrases**
-
----
-
-## 🛠️ Next Steps
-
-### 🔹 POC V2 — Execution
-
-* Add swap confirmation step
-* Validate:
-
-  * wallet connection
-  * quote expiry
-* Send BTC transaction to `inbound_address`
-* Use `memo` from quote
-* Capture `txid`
-
----
-
-### 🔹 POC V3 — Swap Status
-
-* Track swap progress
-* Show:
-
-  * pending
-  * processing
-  * completed / refunded
-
----
-
-### 🔹 Future
-
-* Maya Protocol integration
-* Multi-provider support
-* Better UX & error handling
-
----
+------------------------------------------------------------------------
 
 ## ⚠️ Disclaimer
 
-This project is in **POC stage**.
-
-Do **not** use with real funds until swap execution is fully validated.
-
----
-
-## 🧑‍💻 Author
-
-RideN
+POC only. Do not use real funds yet.
