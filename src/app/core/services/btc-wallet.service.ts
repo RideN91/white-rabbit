@@ -7,6 +7,11 @@ export interface BtcWalletAccount {
   purpose?: string;
 }
 
+export interface SignedPsbtResult {
+  psbtBase64: string;
+  txId?: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -49,7 +54,40 @@ export class BtcWalletService {
     }
   }
 
-  disconnect(): void {
+  public disconnect(): void {
     this._account.set(null);
+  }
+
+  public async signAndBroadcastPsbt(psbtBase64: string): Promise<SignedPsbtResult> {
+    const account = this._account();
+
+    if (!account?.address) {
+      throw new Error('BTC wallet is not connected.');
+    }
+
+    // TODO:
+    // 1) zavolat sats-connect signPsbt
+    // 2) podepsat inputy pro payment address
+    // 3) ideálně použít broadcast, pokud ho flow dovolí
+    // 4) vrátit signed psbt / txid
+
+    console.log('SIGN_PSBT_REQUEST', {
+      address: account.address,
+      psbtBase64,
+    });
+
+    return {
+      psbtBase64,
+    };
+  }
+
+  public getPaymentAddress(): string {
+    const address = this._account()?.address;
+
+    if (!address) {
+      throw new Error('BTC wallet is not connected.');
+    }
+
+    return address;
   }
 }

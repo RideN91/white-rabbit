@@ -6,6 +6,7 @@ import {
 } from '../../../../core/services/thorchain.service';
 import { SwapQuoteCardComponent } from '../swap-quote-card/swap-quote-card.component';
 import { BtcWalletService } from '../../../../core/services/btc-wallet.service';
+import { SwapExecutionService } from '../../../../core/services/swap-execution.service';
 
 export interface SwapExecutionPreview {
   amountBtc: string;
@@ -30,8 +31,10 @@ export interface SwapExecutionPreview {
 export class SwapFormComponent {
   private readonly fb = inject(FormBuilder);
   private readonly thorchainService = inject(ThorchainService);
+  private readonly swapExecutionService = inject(SwapExecutionService);
   protected readonly btcWallet = inject(BtcWalletService);
   protected readonly executionPreview = signal<SwapExecutionPreview | null>(null);
+  protected readonly isExecuting = signal(false);
   protected readonly isLoading = signal(false);
   protected readonly quote = signal<ThorchainQuoteResponse | null>(null);
   protected readonly errorMessage = signal<string | null>(null);
@@ -47,10 +50,22 @@ export class SwapFormComponent {
       && !this.isQuoteExpired();
   }
 
-  public onExecuteSwap(): void {
-    if (!this.canExecute()) return;
+  public async onExecuteSwap(): Promise<void> {
+    const preview = this.executionPreview();
 
-    console.log('EXECUTE_SWAP', this.executionPreview());
+    if (!preview || !this.canExecute()) {
+      return;
+    }
+
+    this.isExecuting.set(true);
+
+    try {
+      await this.swapExecutionService.execute(preview);
+    } catch (error) {
+      console.error('EXECUTE_SWAP_FAILED', error);
+    } finally {
+      this.isExecuting.set(false);
+    }
   }
 
   public onSubmit(): void {

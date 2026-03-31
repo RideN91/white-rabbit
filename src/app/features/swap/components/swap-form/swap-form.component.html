@@ -87,9 +87,9 @@
         class="swap-form-card__button"
         type="button"
         (click)="onExecuteSwap()"
-        [disabled]="!canExecute()"
+        [disabled]="!canExecute() || isExecuting()"
       >
-        Execute Swap
+        {{ isExecuting() ? 'Executing...' : 'Execute Swap' }}
       </button>
     </div>
   </form>
